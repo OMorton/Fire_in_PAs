@@ -3,7 +3,7 @@ library(tidyverse)
 library(mgcv)
 library(marginaleffects)
 options(scipen = 999)
-
+a
 ## Read and format data
 data.path <- "X:/morton_research/User/bi1om/Research/Fire/Fire_in_PAs/Analysis/"
 ## Standardize all variables
