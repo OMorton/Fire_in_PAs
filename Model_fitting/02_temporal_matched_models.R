@@ -201,8 +201,8 @@ ggplot(SEA.raw.sum, aes(year, mn, colour = treatment)) +
 ## LAM Model fitting -----------------------------------------------------------
 
 system.time(LAM_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1 + treatment +
-                                   s(x.z, y.z, k = 50) + 
-                                   s(travel.time.z, bs = "cr", k = 20) +
+                                    s(x.z, y.z, by = treatment, k = 50) + 
+                                    s(travel.time.z, bs = "cr", k = 20) +
                                    s(elevation.z, bs = "cr", k = 20) +
                                    s(slope.logz, bs = "cr", k = 20) +
                                    s(pop.density.logz, bs = "cr", k = 20) +
@@ -220,36 +220,12 @@ system.time(LAM_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1
                                    s(year.z, bs = "cr", k = 6) +
                                    s(year.z, by = treatment, bs='cr', k = 6),
                                  data = LAM.temporal.z, family = binomial()))
-saveRDS(LAM_mod_temp50, paste0(data.path,"Outputs/Models/LAM.Mod.Temporal.50.new.rds"))
+saveRDS(LAM_mod_temp50, paste0(data.path,"Outputs/Models/LAM.Mod.Temporal.50.spat.2025.rds"))
 
-system.time(LAM_mod_temp50_RI <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1 + treatment +
-                                    s(x.z, y.z, k = 50) + 
-                                    s(travel.time.z, bs = "cr", k = 20) +
-                                    s(elevation.z, bs = "cr", k = 20) +
-                                    s(slope.logz, bs = "cr", k = 20) +
-                                    s(pop.density.logz, bs = "cr", k = 20) +
-                                    s(precipitation.z, bs = "cr", k = 20) +
-                                    s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                    s(precipitation.driest.z, bs = "cr", k = 20) +
-                                    s(temperature.hottest.z, bs = "cr", k = 20) +
-                                    s(fwi.95.z, bs = "cr", k = 20) +
-                                    s(forest.area.z, bs = "cr", k = 20)+
-                                    ## country
-                                    s(ISO3, bs='re', by = country_dummy) +
-                                    s(ISO3, treatment, bs='re', by = country_trt_dummy) +
-                                    ## spat
-                                    s(pixel_id, bs='re') +
-                                    ## temporal
-                                    s(year.z, bs = "cr", k = 6) +
-                                    s(year.z, by = treatment, bs='cr', k = 6),
-                                  data = LAM.temporal.z, family = binomial()))
-saveRDS(LAM_mod_temp50_RI, "Outputs/Models/LAM.Mod.Temporal.50.RI.rds")
-
-length(unique(LAM.temporal.z$pixel_id))
 ## AFR Model fitting -----------------------------------------------------------
 
 system.time(AFR_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1 + treatment +
-                                    s(x.z, y.z, k = 50) + 
+                                    s(x.z, y.z, by = treatment, k = 50) + 
                                     s(travel.time.z, bs = "cr", k = 20) +
                                     s(elevation.z, bs = "cr", k = 20) +
                                     s(slope.logz, bs = "cr", k = 20) +
@@ -268,12 +244,12 @@ system.time(AFR_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1
                                     s(year.z, bs = "cr", k = 6) +
                                     s(year.z, by = treatment, bs='cr', k = 6),
                                   data = AFR.temporal.z, family = binomial()))
-saveRDS(AFR_mod_temp50, paste0(data.path,"Outputs/Models/AFR.Mod.Temporal.50.new.rds"))
+saveRDS(AFR_mod_temp50, paste0(data.path,"Outputs/Models/AFR.Mod.Temporal.50.spat.2025.rds"))
 
 ## SEA Model fitting -----------------------------------------------------------
 
 system.time(SEA_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1 + treatment +
-                                    s(x.z, y.z, k = 50) + 
+                                    s(x.z, y.z, by = treatment, k = 50) + 
                                     s(travel.time.z, bs = "cr", k = 20) +
                                     s(elevation.z, bs = "cr", k = 5) +
                                     s(slope.logz, bs = "cr", k = 20) +
@@ -292,7 +268,7 @@ system.time(SEA_mod_temp50 <- bam(cbind(annual.burn.cells, remaining.unburn) ~ 1
                                     s(year.z, bs = "cr", k = 6) +
                                     s(year.z, by = treatment, bs='cr', k = 6),
                                   data = SEA.temporal.z, family = binomial()))
-saveRDS(SEA_mod_temp50, paste0(data.path,"Outputs/Models/SEA.Mod.Temporal.50.new.rds"))
+saveRDS(SEA_mod_temp50, paste0(data.path,"Outputs/Models/SEA.Mod.Temporal.50.spat.2025.rds"))
 
 
 ## LAM Model fitting - country varying------------------------------------------
