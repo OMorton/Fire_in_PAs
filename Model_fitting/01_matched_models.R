@@ -3,7 +3,7 @@ library(tidyverse)
 library(mgcv)
 library(marginaleffects)
 options(scipen = 999)
-a
+
 ## Read and format data
 data.path <- "X:/morton_research/User/bi1om/Research/Fire/Fire_in_PAs/Analysis/"
 ## Standardize all variables
@@ -132,27 +132,9 @@ save(SEA.matched.data.z, file = paste0(data.path,"Data/Model_fitting/SEA.matched
 
 ## LAM Model -------------------------------------------------------------------
 
-system.time(LAM.mod.for200.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 200) + 
-                                        s(travel.time.z, bs = "cr", k = 30) +
-                                        s(elevation.z, bs = "cr", k = 50) +
-                                        s(slope.logz, bs = "cr", k = 30) +
-                                        s(pop.density.logz, bs = "cr", k = 50) +
-                                        s(precipitation.z, bs = "cr", k = 30) +
-                                        s(precipitation.wettest.z, bs = "cr", k = 30) +
-                                        s(precipitation.driest.z, bs = "cr", k = 50) +
-                                        s(temperature.hottest.z, bs = "cr", k = 30) +
-                                        s(fwi.95.z, bs = "cr", k = 100) +
-                                        s(forest.area.z, bs = "cr", k = 30)+
-                                        s(ISO3, bs='re', by = country_dummy) +
-                                        s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                      data = LAM.matched.data.z, family = binomial()))
-
-saveRDS(LAM.mod.for200.new, "Outputs/Models/LAM.Mod.Forest.200.new.rds")
-
 system.time(LAM.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 100) + 
-                                        s(travel.time.z, bs = "cr", k = 20) +
+                                         s(x.z, y.z, by = treatment, k = 100) + 
+                                         s(travel.time.z, bs = "cr", k = 20) +
                                         s(elevation.z, bs = "cr", k = 20) +
                                         s(slope.logz, bs = "cr", k = 20) +
                                         s(pop.density.logz, bs = "cr", k = 20) +
@@ -167,31 +149,12 @@ system.time(LAM.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1
                                         s(ISO3, treatment, bs='re', by = country_trt_dummy),
                                       data = LAM.matched.data.z, family = binomial()))
 
-saveRDS(LAM.mod.for100.simp, paste0(data.path,"Outputs/Models/LAM.Mod.Forest.100.simp.2025.rds"))
+saveRDS(LAM.mod.for100.simp, paste0(data.path,"Outputs/Models/LAM.Mod.Forest.100.spat.2025.rds"))
 
 ## AFR Model -------------------------------------------------------------------
 
-
-system.time(AFR.mod.for200.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                    s(x.z, y.z, k = 200) + 
-                                    s(travel.time.z, bs = "cr", k = 50) +
-                                    s(elevation.z, bs = "cr", k = 20) +
-                                    s(slope.logz, bs = "cr", k = 20) +
-                                    s(pop.density.logz, bs = "cr", k = 50) +
-                                    s(precipitation.z, bs = "cr", k = 20) +
-                                    s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                    s(precipitation.driest.z, bs = "cr", k = 20) +
-                                    s(temperature.hottest.z, bs = "cr", k = 20) +
-                                    s(fwi.95.z, bs = "cr", k = 100) +
-                                    s(forest.area.z, bs = "cr", k = 20)+
-                                      s(surrounding.forest.z, bs = "cr", k = 20)+
-                                    s(ISO3, bs='re', by = country_dummy) +
-                                    s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                  data = AFR.matched.data.z, family = binomial()))
-saveRDS(AFR.mod.for200.new, "Outputs/Models/AFR.Mod.Forest.200.new.rds")
-
 system.time(AFR.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                         s(x.z, y.z, k = 100) + 
+                                         s(x.z, y.z, by = treatment, k = 100) + 
                                          s(travel.time.z, bs = "cr", k = 20) +
                                          s(elevation.z, bs = "cr", k = 20) +
                                          s(slope.logz, bs = "cr", k = 20) +
@@ -206,10 +169,10 @@ system.time(AFR.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1
                                          s(ISO3, bs='re', by = country_dummy) +
                                         s(ISO3, treatment, bs='re', by = country_trt_dummy),
                                       data = AFR.matched.data.z, family = binomial()))
-saveRDS(AFR.mod.for100.simp, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.simp.2025.rds"))
+saveRDS(AFR.mod.for100.simp, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.spat.2025.rds"))
 
 system.time(AFR.mod.for100.simp23 <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                           s(x.z, y.z, k = 100) +
+                                           s(x.z, y.z, by = treatment, k = 100) + 
                                            s(travel.time.z, bs = "cr", k = 20)+
                                            s(elevation.z, bs = "cr", k = 20) +
                                            s(slope.logz, bs = "cr", k = 20)+
@@ -226,30 +189,14 @@ system.time(AFR.mod.for100.simp23 <- bam(cbind(burned.cells, non.burned.cells) ~
                                          data = AFR.matched.data.z, family = quasibinomial()))
 
 
-saveRDS(AFR.mod.for100.simp23, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.simp.2025.QB.rds"))
+saveRDS(AFR.mod.for100.simp23, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.spat.2025.QB.rds"))
 
 ## SEA Model -------------------------------------------------------------------
 
-system.time(SEA.mod.for200.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                    s(x.z, y.z, k = 200) + 
-                                    s(travel.time.logz, bs = "cr", k = 30) +
-                                    s(elevation.z, bs = "cr", k = 5) +
-                                    s(slope.logz, bs = "cr", k = 30) +
-                                    s(pop.density.logz, bs = "cr", k = 50) +
-                                    s(precipitation.z, bs = "cr", k = 30) +
-                                    s(precipitation.wettest.z, bs = "cr", k = 30) +
-                                    s(precipitation.driest.z, bs = "cr", k = 30) +
-                                    s(temperature.hottest.z, bs = "cr", k = 30) +
-                                    s(fwi.95.z, bs = "cr", k = 100) +
-                                    s(forest.area.z, bs = "cr", k = 30)+
-                                    s(ISO3, bs='re', by = country_dummy) +
-                                    s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                  data = SEA.matched.data.z, family = binomial()))
-saveRDS(SEA.mod.for200.new, "Outputs/Models/SEA.Mod.Forest.200.2025.rds")
 
 system.time(SEA.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 100) + 
-                                        s(travel.time.logz, bs = "cr", k = 20) +
+                                         s(x.z, y.z, by = treatment, k = 100) + 
+                                         s(travel.time.logz, bs = "cr", k = 20) +
                                         s(elevation.z, bs = "cr", k = 5) +
                                         s(slope.logz, bs = "cr", k = 20) +
                                         s(pop.density.logz, bs = "cr", k = 20) +
@@ -263,12 +210,12 @@ system.time(SEA.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1
                                         s(ISO3, bs='re', by = country_dummy) +
                                         s(ISO3, treatment, bs='re', by = country_trt_dummy),
                                       data = SEA.matched.data.z, family = binomial()))
-saveRDS(SEA.mod.for100.simp, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.100.simp.2025.rds"))
+saveRDS(SEA.mod.for100.simp, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.100.spat.2025.rds"))
 
 
 system.time(SEA.mod.for100.simp.QB <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                         s(x.z, y.z, k = 100) + 
-                                         s(travel.time.logz, bs = "cr", k = 20) +
+                                            s(x.z, y.z, by = treatment, k = 100) + 
+                                            s(travel.time.logz, bs = "cr", k = 20) +
                                          s(elevation.z, bs = "cr", k = 5) +
                                          s(slope.logz, bs = "cr", k = 20) +
                                          s(pop.density.logz, bs = "cr", k = 20) +
@@ -282,69 +229,5 @@ system.time(SEA.mod.for100.simp.QB <- bam(cbind(burned.cells, non.burned.cells) 
                                          s(ISO3, bs='re', by = country_dummy) +
                                          s(ISO3, treatment, bs='re', by = country_trt_dummy),
                                        data = SEA.matched.data.z, family = quasibinomial()))
-saveRDS(SEA.mod.for100.simp.QB, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.100.simp.2025.QB.rds"))
+saveRDS(SEA.mod.for100.simp.QB, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.100.spat.2025.QB.rds"))
 
-#### Discrete = TRUE ####
-## LAM Model -------------------------------------------------------------------
-
-system.time(LAM.mod.for200.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 200) + 
-                                        s(travel.time.z, bs = "cr", k = 30) +
-                                        s(elevation.z, bs = "cr", k = 50) +
-                                        s(slope.logz, bs = "cr", k = 30) +
-                                        s(pop.density.logz, bs = "cr", k = 50) +
-                                        s(precipitation.z, bs = "cr", k = 30) +
-                                        s(precipitation.wettest.z, bs = "cr", k = 30) +
-                                        s(precipitation.driest.z, bs = "cr", k = 50) +
-                                        s(temperature.hottest.z, bs = "cr", k = 30) +
-                                        s(fwi.95.z, bs = "cr", k = 100) +
-                                        s(forest.area.z, bs = "cr", k = 30)+
-                                        s(ISO3, bs='re', by = country_dummy) +
-                                        s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                      data = LAM.matched.data.z, family = binomial(),
-                                      discrete = TRUE))
-
-saveRDS(LAM.mod.for200.new, "Outputs/Models/LAM.Mod.Forest.200.new.disc.rds")
-
-## AFR Model -------------------------------------------------------------------
-
-
-system.time(AFR.mod.for100.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 50) + 
-                                        s(travel.time.z, bs = "cr", k = 20) +
-                                        s(elevation.z, bs = "cr", k = 20) +
-                                        s(slope.logz, bs = "cr", k = 20) +
-                                        s(pop.density.logz, bs = "cr", k = 20) +
-                                        s(precipitation.z, bs = "cr", k = 20) +
-                                        s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                        s(precipitation.driest.z, bs = "cr", k = 20) +
-                                        s(temperature.hottest.z, bs = "cr", k = 20) +
-                                        s(fwi.95.z, bs = "cr", k = 50) +
-                                        s(forest.area.z, bs = "cr", k = 20)+
-                                        s(ISO3, bs='re', by = country_dummy) +
-                                        s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                      data = AFR.matched.data.z, family = binomial(),
-                                      discrete = TRUE))
-saveRDS(AFR.mod.for100.new, "Outputs/Models/AFR.Mod.Forest.100.new.disc.rds")
-summary(AFR.mod.for100.new)
-
-## SEA Model -------------------------------------------------------------------
-
-system.time(SEA.mod.for100.new <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                        s(x.z, y.z, k = 50) + 
-                                        s(travel.time.logz, bs = "cr", k = 20) +
-                                        s(elevation.z, bs = "cr", k = 5) +
-                                        s(slope.logz, bs = "cr", k = 20) +
-                                        s(pop.density.logz, bs = "cr", k = 20) +
-                                        s(precipitation.z, bs = "cr", k = 20) +
-                                        s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                        s(precipitation.driest.z, bs = "cr", k = 20) +
-                                        s(temperature.hottest.z, bs = "cr", k = 20) +
-                                        s(fwi.95.z, bs = "cr", k = 50) +
-                                        s(forest.area.z, bs = "cr", k = 20)+
-                                        s(ISO3, bs='re', by = country_dummy) +
-                                        s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                      data = SEA.matched.data.z, family = binomial(),
-                                      discrete = TRUE))
-saveRDS(SEA.mod.for100.new, "Outputs/Models/SEA.Mod.Forest.100.new.disc.rds")
-summary(SEA.mod.for100.new)
