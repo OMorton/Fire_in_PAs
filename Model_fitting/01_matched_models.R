@@ -171,46 +171,46 @@ system.time(AFR.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1
                                       data = AFR.matched.data.z, family = binomial()))
 saveRDS(AFR.mod.for100.simp, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.spat.2025.rds"))
 
-system.time(AFR.mod.for100.simp23 <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                           s(x.z, y.z, by = treatment, k = 100) + 
-                                           s(travel.time.z, bs = "cr", k = 20)+
-                                           s(elevation.z, bs = "cr", k = 20) +
-                                           s(slope.logz, bs = "cr", k = 20)+
-                                           s(pop.density.logz, bs = "cr", k = 20) +
-                                           s(precipitation.z, bs = "cr", k = 20) +
-                                           s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                           s(precipitation.driest.z, bs = "cr", k = 20) +
-                                           s(temperature.hottest.z, bs = "cr", k = 20) +
-                                           s(fwi.95.z, bs = "cr", k = 50) +
-                                           s(forest.area.z, bs = "cr", k = 20)+
-                                           s(surrounding.forest.z, bs = "cr", k = 20)+
-                                           s(ISO3, bs='re', by = country_dummy) +
-                                           s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                         data = AFR.matched.data.z, family = quasibinomial()))
+system.time(AFR.mod.for100.simp.QB2 <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
+                                 s(x.z, y.z, by = treatment, k = 75) + 
+                                 s(travel.time.z, bs = "cr", k = 20)+
+                                 s(elevation.z, bs = "cr", k = 5) +
+                                 s(slope.logz, bs = "cr", k = 20)+
+                                 s(pop.density.logz, bs = "cr", k = 20) +
+                                 s(precipitation.z, bs = "cr", k = 20) +
+                                 s(precipitation.wettest.z, bs = "cr", k = 20) +
+                                 s(precipitation.driest.z, bs = "cr", k = 20) +
+                                 s(temperature.hottest.z, bs = "cr", k = 20) +
+                                 s(fwi.95.z, bs = "cr", k = 50) +
+                                 s(forest.area.z, bs = "cr", k = 20)+
+                                 s(surrounding.forest.z, bs = "cr", k = 20)+
+                                 s(ISO3, bs='re', by = country_dummy) +
+                                 s(ISO3, treatment, bs='re', by = country_trt_dummy),
+                               data = AFR.matched.data.z, family = quasibinomial()))
 
 
-saveRDS(AFR.mod.for100.simp23, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.100.spat.2025.QB.rds"))
+saveRDS(AFR.mod.for100.simp.QB2, paste0(data.path,"Outputs/Models/AFR.Mod.Forest.75.spat.2025.QB.rds"))
 
 ## SEA Model -------------------------------------------------------------------
 
 
-system.time(SEA.mod.for100.simp <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
-                                         s(x.z, y.z, by = treatment, k = 100) + 
-                                         s(travel.time.logz, bs = "cr", k = 20) +
-                                        s(elevation.z, bs = "cr", k = 5) +
-                                        s(slope.logz, bs = "cr", k = 20) +
-                                        s(pop.density.logz, bs = "cr", k = 20) +
-                                        s(precipitation.z, bs = "cr", k = 20) +
-                                        s(precipitation.wettest.z, bs = "cr", k = 20) +
-                                        s(precipitation.driest.z, bs = "cr", k = 20) +
-                                        s(temperature.hottest.z, bs = "cr", k = 20) +
-                                        s(fwi.95.z, bs = "cr", k = 50) +
-                                        s(forest.area.z, bs = "cr", k = 20)+
-                                         s(surrounding.forest.z, bs = "cr", k = 20)+
-                                        s(ISO3, bs='re', by = country_dummy) +
-                                        s(ISO3, treatment, bs='re', by = country_trt_dummy),
-                                      data = SEA.matched.data.z, family = binomial()))
-saveRDS(SEA.mod.for100.simp, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.100.spat.2025.rds"))
+system.time(SEA.mod.for100.simp4 <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
+                                          s(x.z, y.z, by = treatment, k = 100) + 
+                                          s(travel.time.logz, bs = "cr", k = 20) +
+                                          s(elevation.z, bs = "cr", k = 5) +
+                                          s(slope.logz, bs = "cr", k = 20) +
+                                          s(pop.density.logz, bs = "cr", k = 20) +
+                                          s(precipitation.z, bs = "cr", k = 20) +
+                                          s(precipitation.wettest.z, bs = "cr", k = 20) +
+                                          s(precipitation.driest.z, bs = "cr", k = 20) +
+                                          s(temperature.hottest.z, bs = "cr", k = 20) +
+                                          s(fwi.95.z, bs = "cr", k = 20) +
+                                          s(forest.area.z, bs = "cr", k = 25)+
+                                          s(surrounding.forest.z, bs = "cr", k = 20)+
+                                          s(ISO3, bs='re', by = country_dummy) +
+                                          s(ISO3, treatment, bs='re', by = country_trt_dummy),
+                                        data = SEA.matched.data.z, family = binomial()))
+saveRDS(SEA.mod.for100.simp4, paste0(data.path,"Outputs/Models/SEA.Mod.Forest.25.100.spat.2025.rds"))
 
 
 system.time(SEA.mod.for100.simp.QB <- bam(cbind(burned.cells, non.burned.cells) ~ 1 + treatment +
